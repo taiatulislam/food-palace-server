@@ -24,8 +24,17 @@ async function run() {
 
         const foods = client.db("foodPalaceDB").collection("allFoods");
 
+        // Show all food
         app.get('/allFoods', async (req, res) => {
             const result = await foods.find().toArray();
+            res.send(result)
+        })
+
+        // Show search food
+        app.get('/allFoods/:name', async (req, res) => {
+            const name = req.params.name;
+            const query = { name: name }
+            const result = await foods.find(query).toArray();
             res.send(result)
         })
 
