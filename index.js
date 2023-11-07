@@ -22,11 +22,11 @@ async function run() {
     try {
         // await client.connect();
 
-        const foods = client.db("foodPalaceDB").collection("allFoods");
+        const foodCollection = client.db("foodPalaceDB").collection("allFoods");
 
         // Show all food
         app.get('/allFoods', async (req, res) => {
-            const result = await foods.find().toArray();
+            const result = await foodCollection.find().toArray();
             res.send(result)
         })
 
@@ -34,7 +34,16 @@ async function run() {
         app.get('/allFoods/:name', async (req, res) => {
             const name = req.params.name;
             const query = { name: name }
-            const result = await foods.find(query).toArray();
+            const result = await foodCollection.find(query).toArray();
+            res.send(result)
+        })
+
+        // Show food in a page
+        app.get('/foods', async (req, res) => {
+            const page = parseInt(req.query.page);
+            const size = parseInt(req.query.size);
+
+            const result = await foodCollection.find().skip(page * size).limit(size).toArray();
             res.send(result)
         })
 
