@@ -23,6 +23,7 @@ async function run() {
         // await client.connect();
 
         const foodCollection = client.db("foodPalaceDB").collection("allFoods");
+        const purchaseCollection = client.db("foodPalaceDB").collection("purchase");
 
         // Show all food
         app.get('/allFood', async (req, res) => {
@@ -47,11 +48,26 @@ async function run() {
             res.send(result)
         })
 
-        // Get data by id
+        // Get data by id in details
         app.get('/foodDetails/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: new ObjectId(id) }
             const result = await foodCollection.findOne(query);
+            res.send(result)
+        })
+
+        // Get data by id in order
+        app.get('/purchase/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) }
+            const result = await foodCollection.findOne(query);
+            res.send(result)
+        })
+
+        // purchase data add
+        app.post('/purchase', async (req, res) => {
+            const addPurchase = req.body;
+            const result = await purchaseCollection.insertOne(addPurchase);
             res.send(result)
         })
 
