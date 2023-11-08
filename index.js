@@ -31,6 +31,14 @@ async function run() {
             res.send(result)
         })
 
+        // Show popular food
+        app.get('/popularFood', async (req, res) => {
+            const query = { orderCount: { $gt: 0 } };
+            const options = { sort: { orderCount: -1 } };
+            const result = await foodCollection.find(query, options).limit(6).toArray();
+            res.send(result)
+        })
+
         // Show search food
         app.get('/allFood/:name', async (req, res) => {
             const name = req.params.name;
@@ -40,7 +48,7 @@ async function run() {
         })
 
         // Show food in a page
-        app.get('/allFood', async (req, res) => {
+        app.get('/allFoodPage', async (req, res) => {
             const page = parseInt(req.query.page);
             const size = parseInt(req.query.size);
 
