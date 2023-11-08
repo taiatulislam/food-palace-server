@@ -125,6 +125,14 @@ async function run() {
             res.send(result)
         })
 
+        // Show my ordered food
+        app.get('/ordered/:email', async (req, res) => {
+            const email = req.params.email;
+            const query = { userEmail: email }
+            const result = await purchaseCollection.find(query).toArray();
+            res.send(result)
+        })
+
         // Add Food
         app.post('/addFood', async (req, res) => {
             const addFood = req.body;
