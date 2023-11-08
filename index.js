@@ -24,10 +24,18 @@ async function run() {
 
         const foodCollection = client.db("foodPalaceDB").collection("allFoods");
         const purchaseCollection = client.db("foodPalaceDB").collection("purchase");
+        const userCollection = client.db("foodPalaceDB").collection("users");
 
         // Show all food
         app.get('/allFood', async (req, res) => {
             const result = await foodCollection.find().toArray();
+            res.send(result)
+        })
+
+        // store user data
+        app.post('/users', async (req, res) => {
+            const user = req.body;
+            const result = await userCollection.insertOne(user);
             res.send(result)
         })
 
