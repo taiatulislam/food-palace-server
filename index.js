@@ -15,8 +15,10 @@ const client = new MongoClient(uri, {
     }
 });
 
-app.use(cors())
-app.use(express.json())
+app.use(cors({
+    origin: ['https://food-palace-client.web.app']
+}));
+app.use(express.json());
 
 async function run() {
     try {
