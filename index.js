@@ -3,7 +3,7 @@ const cors = require("cors");
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 require("dotenv").config();
 const app = express();
-const port = process.env.PORT || 5010;
+const port = process.env.PORT || 5000;
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.1qp2qmz.mongodb.net/?retryWrites=true&w=majority`;
 
@@ -17,7 +17,7 @@ const client = new MongoClient(uri, {
 
 app.use(
   cors({
-    origin: ["https://food-palace-client.web.app"],
+    origin: ["https://food-palace-client.web.app", "http://localhost:5173"],
   })
 );
 app.use(express.json());
@@ -31,7 +31,7 @@ async function run() {
     const userCollection = client.db("foodPalaceDB").collection("users");
 
     app.get("/", (req, res) => {
-      res.send("Server is running locally 🚀");
+      res.send("Server is running 🚀");
     });
 
     // Show all food
