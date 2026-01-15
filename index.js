@@ -49,13 +49,20 @@ async function run() {
 
     // Show popular food
     app.get("/popularFood", async (req, res) => {
-      const query = { orderCount: { $gt: 0 } };
-      const options = { sort: { orderCount: -1 } };
-      const result = await foodCollection
-        .find(query, options)
-        .limit(6)
-        .toArray();
-      res.send(result);
+      try {
+        const query = { orderCount: { $gt: 0 } };
+
+        const result = await foodCollection
+          .find(query)
+          .sort({ orderCount: -1 })
+          .limit(6)
+          .toArray();
+
+        res.send(result);
+      } catch (err) {
+        console.error("Error fetching popular food:", err);
+        res.status(500).send({ error: "Internal Server Error" });
+      }
     });
 
     // Show search food
