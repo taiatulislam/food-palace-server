@@ -18,7 +18,7 @@ const client = new MongoClient(uri, {
 app.use(
   cors({
     origin: ["https://food-palace-client.web.app", "http://localhost:5173"],
-  })
+  }),
 );
 app.use(express.json());
 
@@ -45,6 +45,33 @@ async function run() {
       const user = req.body;
       const result = await userCollection.insertOne(user);
       res.send(result);
+    });
+
+    // Get single user by email
+    app.get("/users/:email", async (req, res) => {
+      try {
+        const email = req.params.email;
+
+        const query = { email: email };
+
+        const user = await userCollection.findOne(query);
+
+        if (!user) {
+          return res.status(404).send({
+            success: false,
+            message: "User not found",
+          });
+        }
+
+        res.send(user);
+      } catch (error) {
+        console.error("Failed to get user:", error);
+
+        res.status(500).send({
+          success: false,
+          message: "Internal server error",
+        });
+      }
     });
 
     // Show popular food
@@ -173,7 +200,7 @@ async function run() {
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log(
-      "Pinged your deployment. You successfully connected to MongoDB!"
+      "Pinged your deployment. You successfully connected to MongoDB!",
     );
   } finally {
     // await client.close();
